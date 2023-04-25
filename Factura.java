@@ -4,17 +4,17 @@ public class Factura {
   private int idFac;
   private String dateFac;
   private double total;
+  private int numFac;
+  private String dirFac;
 
-  public Factura(int idFac, String dateFac, double total) {
+  public Factura(int idFac, String dateFac, double total, int numFac, String dirFac) {
     this.idFac = idFac;
     this.dateFac = dateFac;
     this.total = total;
+    this.numFac = numFac;
+    this.dirFac = dirFac;
   }
 
-  @Override
-  public String toString() {
-    return "factura [idFac=" + idFac + ", dateFac=" + dateFac + ", total=" + total + "]";
-  }
 
   // Getters
 
@@ -30,6 +30,14 @@ public class Factura {
     return total;
   }
 
+  public int getNumFac() {
+    return numFac;
+  }
+
+  public String getDirFac() {
+    return dirFac;
+  }
+
   // Setters
 
   public void setIdFac(int idFac) {
@@ -42,5 +50,14 @@ public class Factura {
 
   public void setTotal(double total) {
     this.total = total;
+  }
+
+  public void setNumFac(int numFac) {
+    this.numFac = numFac;
+  }
+
+
+  public void setDirFac(String dirFac) {
+    this.dirFac = dirFac;
   }
 }
