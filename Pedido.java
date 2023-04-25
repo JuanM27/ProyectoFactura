@@ -4,19 +4,18 @@ public class Pedido {
   private int idPed;
   private boolean facturado;
   private String datePed;
+  private ArrayList<articulo> articulos;
+  private int cantidad;
   private double total;
 
-  public Pedido(int idPed, boolean facturado, String datePed, double total) {
+  public pedido(int idPed, boolean facturado, String datePed, ArrayList<articulo> articulos, int cantidad,
+      double total) {
     this.idPed = idPed;
     this.facturado = facturado;
     this.datePed = datePed;
+    this.articulos = articulos;
+    this.cantidad = cantidad;
     this.total = total;
-  }
-
-  @Override
-  public String toString() {
-    return "pedido [idPed=" + idPed + ", facturado=" + facturado + ", datePed=" + datePed
-        + ", total=" + total + "]";
   }
 
   // Getters//
@@ -33,14 +32,22 @@ public class Pedido {
     return datePed;
   }
 
+  public ArrayList<articulo> getArticulos() {
+    return articulos;
+  }
+
   public double getTotal() {
     return total;
+  }
+
+  public int getCantidad() {
+    return cantidad;
   }
 
   // Setters
 
   public void setIdPed(int idPed) {
-    this.idPed = idPed;
+  this.idPed = idPed;
   }
 
   public void setFacturado(boolean facturado) {
@@ -51,7 +58,15 @@ public class Pedido {
     this.datePed = datePed;
   }
 
+  public void setArticulos(ArrayList<articulo> articulos) {
+    this.articulos = articulos;
+  }
+
   public void setTotal(double total) {
     this.total = total;
+  }
+
+  public void setCantidad(int cantidad) {
+    this.cantidad = cantidad;
   }
 }
