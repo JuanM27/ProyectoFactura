@@ -22,8 +22,8 @@ class ProyectoFactura {
           1. Introducir un cliente
           2. Introducir un artículo
           3. Crear un pedido
-          6. Salir del programa
-          7. Mostrar clientes
+          4. Mostrar clientes
+          5. Salir del programa
           Escribe un número: """);
       entrada = scanner.nextInt();
       System.out.println();
@@ -59,12 +59,6 @@ class ProyectoFactura {
 
         case 2:
 
-          Statement p = conexion.createStatement();
-          ResultSet listado = p.executeQuery("SELECT * FROM cliente");
-
-          while (listado.next()) {
-            System.out.println(listado.getString("id") + (" ") + listado.getString("nombre"));
-          }
 
 
           break;
@@ -74,6 +68,12 @@ class ProyectoFactura {
           break;
         case 4:
 
+          Statement p = conexion.createStatement();
+          ResultSet listado = p.executeQuery("SELECT * FROM cliente");
+
+          while (listado.next()) {
+            System.out.println(listado.getString("id") + (" ") + listado.getString("nombre"));
+          }
 
           break;
         case 5:
@@ -82,7 +82,7 @@ class ProyectoFactura {
         default:
           break;
       }
-    } while (entrada != 6);
+    } while (entrada != 5);
     conexion.close();
   }
 }
