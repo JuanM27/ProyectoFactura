@@ -68,8 +68,26 @@ class ProyectoFactura {
 
         case 2:
 
+          System.out.print("Introduce el nombre del artículo: ");
+          String nombreArt = scanner.next();
 
+          System.out.print("Introduce la categoría: ");
+          String categoriaArt = scanner.next();
 
+          System.out.print("Introduce el precio del artículo separado con coma: ");
+          double precioArt = scanner.nextDouble();
+
+          System.out.print("Introduce el stock del artículo: ");
+          int stockArt = scanner.nextInt();
+
+          Articulo articulo = new Articulo(nombreArt, categoriaArt, stockArt, precioArt);
+
+          Statement insertArt = conexion.createStatement();
+          String insertArticulo = "INSERT INTO articulo VALUES ('0" + "', '" + articulo.getNombre()
+              + "', '" + articulo.getCategoria() + "', '" + articulo.getPrecio() + "', "
+              + articulo.getStock() + ")";
+
+          insertArt.execute(insertArticulo);
           break;
 
         case 3:
@@ -82,7 +100,7 @@ class ProyectoFactura {
 
           while (listado.next()) {
             System.out
-                .println(String.format("%s10 %s10 %s10 %s10 %s10 %s10", listado.getString("CodCli"),
+                .println(String.format("%s %10s %12s %8s %15s %20s", listado.getString("CodCli"),
                     listado.getString("NomCli"), listado.getString("ApeCli"),
                     listado.getString("Ape2Cli"), listado.getString("TelCli"),
                     listado.getString("EmailCli"), listado.getString("DNICli")));

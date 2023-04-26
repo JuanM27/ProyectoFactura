@@ -1,15 +1,17 @@
 package ProyectoFactura.eclipse;
 
+import java.util.ArrayList;
+
 public class Pedido {
   private int idPed;
   private boolean facturado;
   private String datePed;
-  private ArrayList<articulo> articulos;
+  private ArrayList<Articulo> articulos;
   private int cantidad;
   private double total;
 
-  public pedido(int idPed, boolean facturado, String datePed, ArrayList<articulo> articulos, int cantidad,
-      double total) {
+  public Pedido(int idPed, boolean facturado, String datePed, ArrayList<Articulo> articulos,
+      int cantidad, double total) {
     this.idPed = idPed;
     this.facturado = facturado;
     this.datePed = datePed;
@@ -32,7 +34,7 @@ public class Pedido {
     return datePed;
   }
 
-  public ArrayList<articulo> getArticulos() {
+  public ArrayList<Articulo> getArticulos() {
     return articulos;
   }
 
@@ -47,7 +49,7 @@ public class Pedido {
   // Setters
 
   public void setIdPed(int idPed) {
-  this.idPed = idPed;
+    this.idPed = idPed;
   }
 
   public void setFacturado(boolean facturado) {
@@ -58,7 +60,7 @@ public class Pedido {
     this.datePed = datePed;
   }
 
-  public void setArticulos(ArrayList<articulo> articulos) {
+  public void setArticulos(ArrayList<Articulo> articulos) {
     this.articulos = articulos;
   }
 

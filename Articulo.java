@@ -7,18 +7,18 @@ public class Articulo {
   private double precio;
 
 
-  public Articulo(String nombre, String categoria, int stock, double precio) {
+  public Articulo(String nombre, String categoria, int stockArt, double precio) {
     this.nombre = nombre;
     this.categoria = categoria;
-    this.stock = stock;
+    this.stock = stockArt;
     this.precio = precio;
   }
 
 
   @Override
   public String toString() {
-    return "articulo [, nombre=" + nombre + ", categoria=" + categoria
-        + ", stock=" + stock + ", precio=" + precio + "]";
+    return "articulo [, nombre=" + nombre + ", categoria=" + categoria + ", stock=" + stock
+        + ", precio=" + precio + "]";
   }
 
   // getters//
@@ -43,7 +43,7 @@ public class Articulo {
     return precio;
   }
 
-  // setters// 
+  // setters//
 
 
   public void setNombre(String nombre) {
