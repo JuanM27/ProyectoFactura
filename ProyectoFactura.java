@@ -58,18 +58,29 @@ class ProyectoFactura {
           break;
 
         case 2:
+        System.out.println("Introduce el nombre del artículo: ");
+        String nombreArt = scanner.next();
 
-          Statement p = conexion.createStatement();
-          ResultSet listado = p.executeQuery("SELECT * FROM cliente");
+        System.out.println("Introduce la categoría: ");
+        String categoriaArt = scanner.next(); 
 
-          while (listado.next()) {
-            System.out.println(listado.getString("id") + (" ") + listado.getString("nombre"));
-          }
+        System.out.println("Introduce el precio del artículo: ");
+        double precioArt = scanner.nextDouble();
 
+        System.out.println("Introduce el stock del artículo: ");
+        String stockArt = scanner.next();
+
+        Articulo articulo = new Articulo(nombreArt, categoriaArt, stockArt, precioArt);
+        
+        Statement insertArt = conexion.createStatement();
+        String insertArticulo = "INSERT INTO articulo VALUES ('0" + "', '" + articulo.getNombre()
+        + "', '" + articulo.getCategoria() + "', '" + articulo.getPrecio() + "', "
+        + articulo.getStock() + ")";
 
           break;
 
         case 3:
+          
 
           break;
         case 4:
@@ -77,7 +88,12 @@ class ProyectoFactura {
 
           break;
         case 5:
+          Statement p = conexion.createStatement();
+          ResultSet listado = p.executeQuery("SELECT * FROM cliente");
 
+          while (listado.next()) {
+            System.out.println(listado.getString("id") + (" ") + listado.getString("nombre"));
+          }
           break;
         default:
           break;
