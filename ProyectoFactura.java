@@ -55,14 +55,15 @@ class ProyectoFactura {
 
 
 
-          Cliente cliente = new Cliente(nombre, apellido1, apellido2, dni, email, tel);
+          Cliente cliente = new Cliente(nombre, apellido1, apellido2, tel, email, dni);
 
 
           Statement s = conexion.createStatement();
-          String insertCliente = "INSERT INTO cliente VALUES ('0" + "', '" + cliente.getNombre()
-              + "', '" + cliente.getApellido1() + "', '" + cliente.getApellido2() + "', '"
-              + cliente.getEmailCli() + "', '" + cliente.getDNI() + "', " + cliente.getNumTel()
-              + ")";
+          String insertCliente =
+              "INSERT INTO cliente (NomCli,ApeCli,Ape2Cli,TelCli,EmailCli,DNICli) VALUES ('"
+                  + cliente.getNombre() + "', '" + cliente.getApellido1() + "', '"
+                  + cliente.getApellido2() + "', '" + cliente.getNumTel() + "', '"
+                  + cliente.getEmailCli() + "', '" + cliente.getDNI() + "')";
 
 
           s.execute(insertCliente);

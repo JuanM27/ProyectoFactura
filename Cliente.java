@@ -9,42 +9,41 @@ public class Cliente {
   private String numTel;
 
 
-  public Cliente(String nombre, String ape1, String ape2, String numTel, String em, String DNI) {
+  public Cliente(String nombre, String ape1, String ape2, String num, String em, String DNI) {
     this.nombre = nombre;
     this.apellido1 = ape1;
     this.apellido2 = ape2;
-    this.numTel = numTel;
+    this.numTel = num;
     this.emailCli = em;
     this.DNI = DNI;
-    this.numTel = numTel;
   }
 
   public String getApellido1() {
-    return apellido1;
+    return this.apellido1;
   }
 
 
   public String getApellido2() {
-    return apellido2;
+    return this.apellido2;
   }
 
 
   public String getEmailCli() {
-    return emailCli;
+    return this.emailCli;
   }
 
 
   public String getNombre() {
-    return nombre;
+    return this.nombre;
   }
 
 
   public String getDNI() {
-    return DNI;
+    return this.DNI;
   }
 
   public String getNumTel() {
-    return numTel;
+    return this.numTel;
   }
 
   public void setApellido1(String apellido1) {
