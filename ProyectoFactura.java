@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 class ProyectoFactura {
@@ -22,7 +24,7 @@ class ProyectoFactura {
           1. Introducir un cliente
           2. Introducir un artículo
           3. Crear un pedido
-          4. Mostrar clientes
+          4. Mostrar tablas
           5. Salir del programa
           Escribe un número: """);
       entrada = scanner.nextInt();
@@ -92,18 +94,98 @@ class ProyectoFactura {
 
         case 3:
 
+          HashMap<Integer, Integer> articulos = new HashMap<Integer, Integer>();
+
+          Mostrar.MostrarClientes();
+
+          System.out.print("Introduzca tu codigo de cliente: ");
+          int codcli = scanner.nextInt();
+          int opcion = 0;
+
+          do {
+
+            System.out.print("""
+                1. Insertar articulo
+                2. Confirmar pedido
+                3. Cancelar
+                Escribe un número: """);
+
+            opcion = scanner.nextInt();
+            System.out.println();
+
+            switch (opcion) {
+              case 1:
+                // Mostrar todos los articulos//
+                Mostrar.MostrarArticulos();
+
+                System.out.print("Inserte el codigo del articulo deseado: ");
+                int codart = scanner.nextInt();
+
+                System.out.print("Inserte la cantidad deseada de su articulo: ");
+                int canart = scanner.nextInt();
+
+                if (articulos.containsKey(codart)) {
+                  articulos.put(codart, canart);
+                  System.out.println(
+                      "El producto seleccionado ya existia en su pedido, cantidad actualizada. ");
+                } else {
+                  articulos.put(codart, canart);
+                  System.out.println("Producto añadido correctamente. ");
+                }
+
+                break;
+
+              case 2:
+
+                int CodPeMax = 0;
+                Statement j = conexion.createStatement();
+                String insertPedido = "INSERT INTO pedido (CodCli) VALUES ( " + codcli + ")";
+                j.execute(insertPedido); // Insertamos el pedido actual en la tabla pedidos//
+
+                String codPe = "SELECT MAX(CodPe) FROM pedido"; // Verificar que esto
+                                                                // funcione//
+
+                ResultSet querySet = j.executeQuery(codPe);
+                // //Select que devuelve el id del
+                // ultimo pedido//
+
+                if (querySet.next()) { // Verificar que esto funcione// //Intentamos guardar
+
+                  CodPeMax = querySet.getInt("MAX(CodPe)");
+                }
+                // el valor de la consulta anteior como int//
+                for (Map.Entry<Integer, Integer> set : articulos.entrySet()) {
+                  String insertartped = "INSERT INTO art_ped (CodPe, CodArt, CantArt) VALUES ( "
+                      + CodPeMax + ", " + set.getKey() + ", " + set.getValue() + " )"; // Recorremos
+                  // el HashMap y
+                  // creamos un
+                  // insert con
+                  // el codart y
+                  // la cant del
+                  // mismo por
+                  // cada uno //
+                  j.execute(insertartped); // Ejecutamos el isnert anterior de la tabla art_ped
+                }
+                opcion = 3;
+                System.out.println("Se ha creado su pedido correctamente.");
+                break;
+            }
+          } while (opcion != 3);
           break;
         case 4:
 
-          Statement p = conexion.createStatement();
-          ResultSet listado = p.executeQuery("SELECT * FROM cliente");
+          System.out.print(
+              "Introduce el nombre de la tabla que quieras listar (Articulo, Cliente, Pedido, Factura): ");
+          String eleccion = scanner.next().toLowerCase();
 
-          while (listado.next()) {
-            System.out
-                .println(String.format("%s %10s %12s %8s %15s %20s", listado.getString("CodCli"),
-                    listado.getString("NomCli"), listado.getString("ApeCli"),
-                    listado.getString("Ape2Cli"), listado.getString("TelCli"),
-                    listado.getString("EmailCli"), listado.getString("DNICli")));
+          if (eleccion.equals("articulo")) {
+            Mostrar.MostrarArticulos();
+          } else if (eleccion.equals("cliente")) {
+            Mostrar.MostrarClientes();
+          } else if (eleccion.equals("pedido")) {
+            Mostrar.MostrarPedido();
+          } else if (eleccion.equals("factura")) {
+            Mostrar.MostrarFactura();
           }
 
           break;
