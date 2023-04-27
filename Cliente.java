@@ -2,56 +2,73 @@ package ProyectoFactura.eclipse;
 
 public class Cliente {
   private String nombre;
-  private String apellidos;
+  private String apellido1;
+  private String apellido2;
   private String DNI;
-  private int numTel;
+  private String emailCli;
+  private String numTel;
 
 
-  public Cliente(String nombre, String apellidos, String DNI, int numTel) {
+  public Cliente(String nombre, String ape1, String ape2, String num, String em, String DNI) {
     this.nombre = nombre;
-    this.apellidos = apellidos;
+    this.apellido1 = ape1;
+    this.apellido2 = ape2;
+    this.numTel = num;
+    this.emailCli = em;
     this.DNI = DNI;
-    this.numTel = numTel;
+  }
+
+  public String getApellido1() {
+    return this.apellido1;
   }
 
 
-  @Override
-  public String toString() {
-    return "cliente [nombre=" + nombre + ", apellidos=" + apellidos + ", DNI=" + DNI + ", numTel="
-        + numTel + "]";
+  public String getApellido2() {
+    return this.apellido2;
   }
 
 
-  // getters//
+  public String getEmailCli() {
+    return this.emailCli;
+  }
+
 
   public String getNombre() {
-    return nombre;
+    return this.nombre;
   }
 
-  public String getApellidos() {
-    return apellidos;
-  }
 
   public String getDNI() {
-    return DNI;
+    return this.DNI;
   }
 
-  public int getNumTel() {
-    return numTel;
+  public String getNumTel() {
+    return this.numTel;
   }
 
-  // setters//
+  public void setApellido1(String apellido1) {
+    this.apellido1 = apellido1;
+  }
 
   public void setNombre(String nombre) {
     this.nombre = nombre;
   }
 
-  public void setApellidos(String apellidos) {
-    this.apellidos = apellidos;
+  public void setEmailCli(String emailCli) {
+    this.emailCli = emailCli;
+  }
+
+  public void setNumTel(String numTel) {
+    this.numTel = numTel;
   }
 
   public void setDNI(String DNI) {
     this.DNI = DNI;
   }
+
+  public void setApellido2(String apellido2) {
+    this.apellido2 = apellido2;
+  }
+
 }
 

@@ -1,33 +1,27 @@
 package ProyectoFactura.eclipse;
 
 public class Articulo {
-  private int idArt;
   private String nombre;
   private String categoria;
   private int stock;
   private double precio;
 
 
-  public Articulo(int idArt, String nombre, String categoria, int stock, double precio) {
-    this.idArt = idArt;
+  public Articulo(String nombre, String categoria, int stockArt, double precio) {
     this.nombre = nombre;
     this.categoria = categoria;
-    this.stock = stock;
+    this.stock = stockArt;
     this.precio = precio;
   }
 
 
   @Override
   public String toString() {
-    return "articulo [idArt=" + idArt + ", nombre=" + nombre + ", categoria=" + categoria
-        + ", stock=" + stock + ", precio=" + precio + "]";
+    return "articulo [, nombre=" + nombre + ", categoria=" + categoria + ", stock=" + stock
+        + ", precio=" + precio + "]";
   }
 
   // getters//
-
-  public int getIdArt() {
-    return idArt;
-  }
 
 
   public String getNombre() {
@@ -50,10 +44,6 @@ public class Articulo {
   }
 
   // setters//
-
-  public void setIdArt(int idArt) {
-    this.idArt = idArt;
-  }
 
 
   public void setNombre(String nombre) {
