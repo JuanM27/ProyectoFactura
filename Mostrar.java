@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 public class Mostrar {
   public static Connection getConexion() throws SQLException, ClassNotFoundException {
@@ -69,6 +70,29 @@ public class Mostrar {
     ResultSet listado = p.executeQuery("SELECT * FROM pedido");
     ResultSetMetaData metadata = listado.getMetaData();
     int numColumnas = metadata.getColumnCount();
+
+    while (listado.next()) {
+      for (int i = 1; i <= numColumnas; i++) {
+        System.out.print(listado.getString(i));
+        System.out.print("   ");
+      }
+      System.out.println("");
+    }
+
+    System.out.println("");
+
+    System.out.println("Introduce el número del pedido que quieras ver: ");
+    Scanner scanner = new Scanner(System.in);
+    String numPedido = scanner.next();
+
+    /* Controlar input del usuario */
+    String consulta =
+        "SELECT ar.CodArt,NomArt,Categoria,CantArt,Precio,ROUND(Precio*CantArt , 2) AS Subtotal FROM (pedido pe INNER JOIN art_ped arpe ON (pe.CodPe=arpe.CodPe))INNER JOIN articulo ar ON (arpe.CodArt=ar.CodArt) WHERE (pe.CodPe="
+            + Integer.parseInt(numPedido) + ")";
+
+    listado = p.executeQuery(consulta);
+    metadata = listado.getMetaData();
+    numColumnas = metadata.getColumnCount();
 
     while (listado.next()) {
       for (int i = 1; i <= numColumnas; i++) {

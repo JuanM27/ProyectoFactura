@@ -124,17 +124,23 @@ class ProyectoFactura {
                 System.out.print("Inserte el codigo del articulo deseado: ");
                 int codart = scanner.nextInt();
 
+                /* Checkear input y que el código existe */
                 System.out.print("Inserte la cantidad deseada de su articulo: ");
                 int canart = scanner.nextInt();
-
-                if (articulos.containsKey(codart)) {
-                  articulos.put(codart, canart);
-                  System.out.println(
-                      "El producto seleccionado ya existia en su pedido, cantidad actualizada. ");
+                if (Check.CheckStock(codart, canart)) {
+                  /* Checkear cantidad válida */
+                  if (articulos.containsKey(codart)) {
+                    articulos.put(codart, canart);
+                    System.out.println(
+                        "El producto seleccionado ya existia en su pedido, cantidad actualizada. ");
+                  } else {
+                    articulos.put(codart, canart);
+                    System.out.println("Producto añadido correctamente. ");
+                  }
                 } else {
-                  articulos.put(codart, canart);
-                  System.out.println("Producto añadido correctamente. ");
+                  System.out.println("Lo siento, stock insuficiente.");
                 }
+
 
                 break;
 
