@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -13,12 +12,16 @@ import java.util.Scanner;
 
 class ProyectoFactura {
 
-  public static void main(String[] args) throws ClassNotFoundException, SQLException, SQLIntegrityConstraintViolationException {
+  public static void main(String[] args) throws ClassNotFoundException, SQLException {
     Scanner scanner = new Scanner(System.in);
-    int entrada;
     Class.forName("com.mysql.cj.jdbc.Driver");
-    
-    Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ProyectoFactura", "root", "root");
+
+    // Variable Generales //
+    String sentenciaSQL = "";
+    int entrada;
+
+    Connection conexion =
+        DriverManager.getConnection("jdbc:mysql://localhost:3306/pedidos", "root", "");
 
     do {
       System.out.print("""
@@ -29,50 +32,50 @@ class ProyectoFactura {
           5. Facturar
           6. Salir del programa
           Escribe un número: """);
-
       entrada = scanner.nextInt();
       System.out.println();
 
       switch (entrada) {
         case 1:
-          String nombre, apellido1, apellido2, email, dni="", tel="";
-        
+
           System.out.print("Introduce el nombre del cliente: ");
-          nombre = scanner.next();
+          String nombre = scanner.next();
 
           System.out.print("Introduce el primer apellido: ");
-          apellido1 = scanner.next();
+          String apellido1 = scanner.next();
 
           System.out.print("Introduce el segundo apellido: ");
-          apellido2 = scanner.next();
-          
-          tel = ExpresionesRegulares.validaTelefono(scanner);
+          String apellido2 = scanner.next();
 
-          email = ExpresionesRegulares.validaEmail(scanner);
-                    
-          dni = ExpresionesRegulares.validaDNI(scanner); 
-          
-          
+          scanner.nextLine();
 
-          
-          
+          System.out.print("Introduce el número de teléfono: ");
+          String tel = scanner.next();
+
+          System.out.print("Introduce el email: ");
+          String email = scanner.next();
+
+          System.out.print("Introduce el DNI: ");
+          String dni = scanner.next();
+
+
 
           Cliente cliente = new Cliente(nombre, apellido1, apellido2, tel, email, dni);
 
 
           Statement s = conexion.createStatement();
-          String insertCliente =
+          sentenciaSQL =
               "INSERT INTO cliente (NomCli,ApeCli,Ape2Cli,TelCli,EmailCli,DNICli) VALUES ('"
                   + cliente.getNombre() + "', '" + cliente.getApellido1() + "', '"
                   + cliente.getApellido2() + "', '" + cliente.getNumTel() + "', '"
                   + cliente.getEmailCli() + "', '" + cliente.getDNI() + "')";
 
 
-          s.execute(insertCliente);
+          s.execute(sentenciaSQL);
           break;
 
         case 2:
-          
+
           System.out.print("Introduce el nombre del artículo: ");
           String nombreArt = scanner.next();
 
@@ -88,11 +91,11 @@ class ProyectoFactura {
           Articulo articulo = new Articulo(nombreArt, categoriaArt, stockArt, precioArt);
 
           Statement insertArt = conexion.createStatement();
-          String insertArticulo = "INSERT INTO articulo VALUES ('0" + "', '" + articulo.getNombre()
+          sentenciaSQL = "INSERT INTO articulo VALUES ('0" + "', '" + articulo.getNombre()
               + "', '" + articulo.getCategoria() + "', '" + articulo.getPrecio() + "', "
               + articulo.getStock() + ")";
 
-          insertArt.execute(insertArticulo);
+          insertArt.execute(sentenciaSQL);
           break;
 
         case 3:
@@ -103,7 +106,6 @@ class ProyectoFactura {
 
           System.out.print("Introduzca tu codigo de cliente: ");
           int codcli = scanner.nextInt();
-          int opcion = 0;
 
           do {
 
@@ -113,10 +115,10 @@ class ProyectoFactura {
                 3. Cancelar
                 Escribe un número: """);
 
-            opcion = scanner.nextInt();
+            entrada = scanner.nextInt();
             System.out.println();
 
-            switch (opcion) {
+            switch (entrada) {
               case 1:
                 // Mostrar todos los articulos//
                 Mostrar.MostrarArticulos();
@@ -148,13 +150,13 @@ class ProyectoFactura {
 
                 int CodPeMax = 0;
                 Statement j = conexion.createStatement();
-                String insertPedido = "INSERT INTO pedido (CodCli) VALUES ( " + codcli + ")";
-                j.execute(insertPedido); // Insertamos el pedido actual en la tabla pedidos//
+                sentenciaSQL = "INSERT INTO pedido (CodCli) VALUES ( " + codcli + ")";
+                j.execute(sentenciaSQL); // Insertamos el pedido actual en la tabla pedidos//
 
-                String codPe = "SELECT MAX(CodPe) AS MaxCodPe FROM pedido"; // Verificar que esto
+                sentenciaSQL = "SELECT MAX(CodPe) AS MaxCodPe FROM pedido"; // Verificar que esto
                 // funcione//
 
-                ResultSet querySet = j.executeQuery(codPe);
+                ResultSet querySet = j.executeQuery(sentenciaSQL);
                 // //Select que devuelve el id del
                 // ultimo pedido//
 
@@ -164,7 +166,7 @@ class ProyectoFactura {
                 }
                 // el valor de la consulta anteior como int//
                 for (Map.Entry<Integer, Integer> set : articulos.entrySet()) {
-                  String insertartped = "INSERT INTO art_ped (CodPe, CodArt, CantArt) VALUES ( "
+                  sentenciaSQL = "INSERT INTO art_ped (CodPe, CodArt, CantArt) VALUES ( "
                       + CodPeMax + ", " + set.getKey() + ", " + set.getValue() + " )"; // Recorremos
                   // el HashMap y
                   // creamos un
@@ -173,13 +175,13 @@ class ProyectoFactura {
                   // la cant del
                   // mismo por
                   // cada uno //
-                  j.execute(insertartped); // Ejecutamos el isnert anterior de la tabla art_ped
+                  j.execute(sentenciaSQL); // Ejecutamos el isnert anterior de la tabla art_ped
                 }
-                opcion = 3;
+                entrada = 3;
                 System.out.println("Se ha creado su pedido correctamente.");
                 break;
             }
-          } while (opcion != 3);
+          } while (entrada != 3);
           break;
         case 4:
 
@@ -207,16 +209,16 @@ class ProyectoFactura {
           Statement h = conexion.createStatement();
 
           /* Consulta para ver que la tabla este vacia */
-          String verificarTablaLLena = "SELECT COUNT(*) AS Cant_filas FROM factura;";
+          sentenciaSQL= "SELECT COUNT(*) AS Cant_filas FROM factura;";
           int exists = 0;
-          ResultSet alreadyExists = h.executeQuery(verificarTablaLLena);
+          ResultSet alreadyExists = h.executeQuery(sentenciaSQL);
           if (alreadyExists.next()) {
             exists = alreadyExists.getInt("Cant_filas");
             if (exists > 0) {
               /* Verifico si el pedido ya está facturado */
-              String verificarFacturado = "SELECT IF(EXISTS(SELECT * FROM factura WHERE CodPed="
+              sentenciaSQL = "SELECT IF(EXISTS(SELECT * FROM factura WHERE CodPed="
                   + CodPedScanner + "),1,0) AS factura_existe";
-              alreadyExists = h.executeQuery(verificarFacturado);
+              alreadyExists = h.executeQuery(sentenciaSQL);
               if (alreadyExists.next()) {
                 exists = alreadyExists.getInt("factura_existe");
                 if (exists == 1) {
@@ -231,8 +233,8 @@ class ProyectoFactura {
                   Calendar ca = Calendar.getInstance();
 
                   String anio = Integer.toString(ca.get(Calendar.YEAR));
-                  String sacarMaxFac = "SELECT MAX(NumFac) FROM factura";
-                  ResultSet numeroFacMax = h.executeQuery(sacarMaxFac);
+                  sentenciaSQL = "SELECT MAX(NumFac) FROM factura";
+                  ResultSet numeroFacMax = h.executeQuery(sentenciaSQL);
                   String numMaxFac = "";
                   String numFacNuevo = anio;
 
@@ -247,16 +249,16 @@ class ProyectoFactura {
 
                   numFacNuevo += Integer.toString(ult);
 
-                  String insertFactura = "INSERT INTO factura (CodPed,NumFac) VALUES ('"
+                  sentenciaSQL = "INSERT INTO factura (CodPed,NumFac) VALUES ('"
                       + CodPedScanner + "','" + numFacNuevo + "')";
-                  h.execute(insertFactura);
+                  h.execute(sentenciaSQL);
                 }
               }
             } else {
               /* Si la tabala está vacia mete una factura con numero 2023001 */
-              String insertFactura =
+              sentenciaSQL =
                   "INSERT INTO factura (NumFac,CodPed) VALUES ('2023001'," + CodPedScanner + ")";
-              h.execute(insertFactura);
+              h.execute(sentenciaSQL);
             }
           }
 
@@ -264,7 +266,6 @@ class ProyectoFactura {
           break;
       }
     } while (entrada != 6);
-    }while(entrada!=5);scanner.close();
-
-  conexion.close();
-}}
+    conexion.close();
+  }
+}
