@@ -145,8 +145,8 @@ class ProyectoFactura {
                 String insertPedido = "INSERT INTO pedido (CodCli) VALUES ( " + codcli + ")";
                 j.execute(insertPedido); // Insertamos el pedido actual en la tabla pedidos//
 
-                String codPe = "SELECT MAX(CodPe) FROM pedido"; // Verificar que esto
-                                                                // funcione//
+                String codPe = "SELECT MAX(CodPe) AS MaxCodPe FROM pedido"; // Verificar que esto
+                // funcione//
 
                 ResultSet querySet = j.executeQuery(codPe);
                 // //Select que devuelve el id del
@@ -154,7 +154,7 @@ class ProyectoFactura {
 
                 if (querySet.next()) { // Verificar que esto funcione// //Intentamos guardar
 
-                  CodPeMax = querySet.getInt("MAX(CodPe)");
+                  CodPeMax = querySet.getInt("MaxCodPe");
                 }
                 // el valor de la consulta anteior como int//
                 for (Map.Entry<Integer, Integer> set : articulos.entrySet()) {
@@ -199,48 +199,60 @@ class ProyectoFactura {
           System.out.println("Introduce el código del pedido que quieras facturar: ");
           String CodPedScanner = scanner.next();
           Statement h = conexion.createStatement();
-          /* Verifico si el pedido ya está facturado */
-          String verificarFacturado =
-              "SELECT IF(EXISTS(SELECT * FROM factura WhERE CodPed='" + CodPedScanner + "'),1,0)";
+
           /* Consulta para ver que la tabla este vacia */
-          String verificarTablaLLena = "SELECT * FROM factura";
+          String verificarTablaLLena = "SELECT COUNT(*) AS Cant_filas FROM factura;";
+          int exists = 0;
+          ResultSet alreadyExists = h.executeQuery(verificarTablaLLena);
+          if (alreadyExists.next()) {
+            exists = alreadyExists.getInt("Cant_filas");
+            if (exists > 0) {
+              /* Verifico si el pedido ya está facturado */
+              String verificarFacturado = "SELECT IF(EXISTS(SELECT * FROM factura WHERE CodPed="
+                  + CodPedScanner + "),1,0) AS factura_existe";
+              alreadyExists = h.executeQuery(verificarFacturado);
+              if (alreadyExists.next()) {
+                exists = alreadyExists.getInt("factura_existe");
+                if (exists == 1) {
+                  System.out.println("Lo siento el pedido que inenta facturar ya está facturado");
+                } else {
+                  /*
+                   * Coge la factura con numero mas alto, nos quedamos con las 3 ultimas letras las
+                   * parseamos a entero y le sumamos uno, luego la parseamos a String y la
+                   * concatenamos y hacemos el insert
+                   */
+                  /* Para sacar el año */
+                  Calendar ca = Calendar.getInstance();
 
-          /* Para sacar el año */
-          Calendar ca = Calendar.getInstance();
+                  String anio = Integer.toString(ca.get(Calendar.YEAR));
+                  String sacarMaxFac = "SELECT MAX(NumFac) FROM factura";
+                  ResultSet numeroFacMax = h.executeQuery(sacarMaxFac);
+                  String numMaxFac = "";
+                  String numFacNuevo = anio;
 
-          String anio = Integer.toString(ca.get(Calendar.YEAR));
+                  if (numeroFacMax.next()) {
+                    numMaxFac = numeroFacMax.getString("MAX(NumFac)");
+                  }
 
-          /* Si ya está facturado imprime el mensaje */
-          if (!h.execute(verificarFacturado)) {
-            System.out.println("Lo siento el pedido que inenta facturar ya está facturado");
-          } else {
-            /* Si la tabala está vacia mete una factura con numero 2023001 */
-            if (!h.execute(verificarTablaLLena)) {
-              String insertFactura =
-                  "INSERT INTO factura (CodPed,NumFac) VALUES ('" + CodPedScanner + "',2023001)";
-              h.execute(insertFactura);
-            } else {
-              /*
-               * Coge la factura con numero mas alto, nos quedamos con las 3 ultimas letras las
-               * parseamos a entero y le sumamos uno, luego la parseamos a String y la concatenamos
-               * y hacemos el insert
-               */
-              String sacarMaxFac = "SELECT MAX(NumFac) FROM factura";
-              ResultSet numeroFacMax = h.executeQuery(sacarMaxFac);
-              String numMaxFac = "";
-              if (numeroFacMax.next()) {
-                numMaxFac = numeroFacMax.getString("MAX(NumFac)");
+                  int ult = Integer.parseInt(numMaxFac.substring(5, 7)) + 1;
+                  for (int i = 0; i < 3 - (Integer.toString(ult)).length(); i++) {
+                    numFacNuevo += "0";
+                  }
+
+                  numFacNuevo += Integer.toString(ult);
+
+                  String insertFactura = "INSERT INTO factura (CodPed,NumFac) VALUES ('"
+                      + CodPedScanner + "','" + numFacNuevo + "')";
+                  h.execute(insertFactura);
+                }
               }
-              int ult = Integer.parseInt(numMaxFac.substring(5, 7)) + 1;
-              String numFacNuevo = anio + Integer.toString(ult);
-
-              String insertFactura = "INSERT INTO factura (CodPed,NumFac) VALUES ('" + CodPedScanner
-                  + "','" + numFacNuevo + "')";
+            } else {
+              /* Si la tabala está vacia mete una factura con numero 2023001 */
+              String insertFactura =
+                  "INSERT INTO factura (NumFac,CodPed) VALUES ('2023001'," + CodPedScanner + ")";
               h.execute(insertFactura);
             }
           }
-
-          break;
 
         default:
           break;
