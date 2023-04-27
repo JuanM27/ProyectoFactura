@@ -1,9 +1,10 @@
-package ProyectoFactura.eclipse;
+package com.proyectofactura.ProyectoFactura;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +12,12 @@ import java.util.Scanner;
 
 class ProyectoFactura {
 
-  public static void main(String[] args) throws ClassNotFoundException, SQLException {
+  public static void main(String[] args) throws ClassNotFoundException, SQLException, SQLIntegrityConstraintViolationException {
     Scanner scanner = new Scanner(System.in);
     int entrada;
     Class.forName("com.mysql.cj.jdbc.Driver");
-
-    Connection conexion =
-        DriverManager.getConnection("jdbc:mysql://localhost:3306/pedidos", "root", "");
+    
+    Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ProyectoFactura", "root", "root");
 
     do {
       System.out.print("""
@@ -26,34 +26,33 @@ class ProyectoFactura {
           3. Crear un pedido
           4. Mostrar tablas
           5. Salir del programa
-          Escribe un número: """);
+          Escribe un número:  """);
       entrada = scanner.nextInt();
       System.out.println();
 
       switch (entrada) {
         case 1:
-
+          String nombre, apellido1, apellido2, email, dni="", tel="";
+        
           System.out.print("Introduce el nombre del cliente: ");
-          String nombre = scanner.next();
+          nombre = scanner.next();
 
           System.out.print("Introduce el primer apellido: ");
-          String apellido1 = scanner.next();
+          apellido1 = scanner.next();
 
           System.out.print("Introduce el segundo apellido: ");
-          String apellido2 = scanner.next();
+          apellido2 = scanner.next();
+          
+          tel = ExpresionesRegulares.validaTelefono(scanner);
 
-          scanner.nextLine();
+          email = ExpresionesRegulares.validaEmail(scanner);
+                    
+          dni = ExpresionesRegulares.validaDNI(scanner); 
+          
+          
 
-          System.out.print("Introduce el número de teléfono: ");
-          String tel = scanner.next();
-
-          System.out.print("Introduce el email: ");
-          String email = scanner.next();
-
-          System.out.print("Introduce el DNI: ");
-          String dni = scanner.next();
-
-
+          
+          
 
           Cliente cliente = new Cliente(nombre, apellido1, apellido2, tel, email, dni);
 
@@ -70,7 +69,7 @@ class ProyectoFactura {
           break;
 
         case 2:
-
+          
           System.out.print("Introduce el nombre del artículo: ");
           String nombreArt = scanner.next();
 
@@ -197,6 +196,7 @@ class ProyectoFactura {
           break;
       }
     } while (entrada != 5);
+    scanner.close();
     conexion.close();
   }
 }

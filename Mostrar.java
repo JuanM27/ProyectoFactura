@@ -1,4 +1,4 @@
-package ProyectoFactura.eclipse;
+package com.proyectofactura.ProyectoFactura;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,7 @@ public class Mostrar {
     Class.forName("com.mysql.cj.jdbc.Driver");
 
     Connection conexion =
-        DriverManager.getConnection("jdbc:mysql://localhost:3306/pedidos", "root", "");
+        DriverManager.getConnection("jdbc:mysql://localhost:3306/ProyectoFactura", "root", "root");
 
     return conexion;
   }
@@ -26,16 +26,16 @@ public class Mostrar {
     int numColumnas = metadata.getColumnCount();
 
     for (int i = 1; i <= numColumnas; i++) {
-      System.out.print(metadata.getColumnName(i) + "\t");
+      System.out.print(String.format("-%10s", metadata.getColumnName(i)));
     }
 
     System.out.println();
 
     while (listado.next()) {
       for (int i = 1; i <= numColumnas; i++) {
-        System.out.print(listado.getString(i) + "\t");
+        System.out.print(String.format("-%10s", listado.getString(i)));
       }
-      System.out.println("");
+      //System.out.println("");
     }
 
     System.out.println("");
@@ -73,7 +73,7 @@ public class Mostrar {
     while (listado.next()) {
       for (int i = 1; i <= numColumnas; i++) {
         System.out.print(listado.getString(i));
-        System.out.print("   ");
+        //System.out.print("   ");
       }
       System.out.println("");
     }
