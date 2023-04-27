@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -25,7 +26,8 @@ class ProyectoFactura {
           2. Introducir un artículo
           3. Crear un pedido
           4. Mostrar tablas
-          5. Salir del programa
+          5. Facturar
+          6. Salir del programa
           Escribe un número: """);
       entrada = scanner.nextInt();
       System.out.println();
@@ -191,12 +193,59 @@ class ProyectoFactura {
 
           break;
         case 5:
+          /* MIRAR MAÑANA */
+          /* Muestro los pedidos */
+          Mostrar.MostrarPedido();
+          System.out.println("Introduce el código del pedido que quieras facturar: ");
+          String CodPedScanner = scanner.next();
+          Statement h = conexion.createStatement();
+          /* Verifico si el pedido ya está facturado */
+          String verificarFacturado =
+              "SELECT IF(EXISTS(SELECT * FROM factura WhERE CodPed='" + CodPedScanner + "'),1,0)";
+          /* Consulta para ver que la tabla este vacia */
+          String verificarTablaLLena = "SELECT * FROM factura";
+
+          /* Para sacar el año */
+          Calendar ca = Calendar.getInstance();
+
+          String anio = Integer.toString(ca.get(Calendar.YEAR));
+
+          /* Si ya está facturado imprime el mensaje */
+          if (!h.execute(verificarFacturado)) {
+            System.out.println("Lo siento el pedido que inenta facturar ya está facturado");
+          } else {
+            /* Si la tabala está vacia mete una factura con numero 2023001 */
+            if (!h.execute(verificarTablaLLena)) {
+              String insertFactura =
+                  "INSERT INTO factura (CodPed,NumFac) VALUES ('" + CodPedScanner + "',2023001)";
+              h.execute(insertFactura);
+            } else {
+              /*
+               * Coge la factura con numero mas alto, nos quedamos con las 3 ultimas letras las
+               * parseamos a entero y le sumamos uno, luego la parseamos a String y la concatenamos
+               * y hacemos el insert
+               */
+              String sacarMaxFac = "SELECT MAX(NumFac) FROM factura";
+              ResultSet numeroFacMax = h.executeQuery(sacarMaxFac);
+              String numMaxFac = "";
+              if (numeroFacMax.next()) {
+                numMaxFac = numeroFacMax.getString("MAX(NumFac)");
+              }
+              int ult = Integer.parseInt(numMaxFac.substring(5, 7)) + 1;
+              String numFacNuevo = anio + Integer.toString(ult);
+
+              String insertFactura = "INSERT INTO factura (CodPed,NumFac) VALUES ('" + CodPedScanner
+                  + "','" + numFacNuevo + "')";
+              h.execute(insertFactura);
+            }
+          }
 
           break;
+
         default:
           break;
       }
-    } while (entrada != 5);
+    } while (entrada != 6);
     conexion.close();
   }
 }
