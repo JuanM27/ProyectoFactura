@@ -1,4 +1,4 @@
-package com.proyectofactura.ProyectoFactura;
+package ProyectoFactura.eclipse;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -36,7 +36,7 @@ public class Mostrar {
       for (int i = 1; i <= numColumnas; i++) {
         System.out.print(String.format("-%10s", listado.getString(i)));
       }
-      //System.out.println("");
+      // System.out.println("");
     }
 
     System.out.println("");
@@ -74,7 +74,7 @@ public class Mostrar {
     while (listado.next()) {
       for (int i = 1; i <= numColumnas; i++) {
         System.out.print(listado.getString(i));
-        //System.out.print("   ");
+        // System.out.print(" ");
       }
       System.out.println("");
     }

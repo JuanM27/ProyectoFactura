@@ -1,4 +1,4 @@
-package com.proyectofactura.ProyectoFactura;
+package ProyectoFactura.eclipse;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,14 +26,10 @@ class ProyectoFactura {
           2. Introducir un artículo
           3. Crear un pedido
           4. Mostrar tablas
-<<<<<<< HEAD
           5. Facturar
           6. Salir del programa
           Escribe un número: """);
-=======
-          5. Salir del programa
-          Escribe un número:  """);
->>>>>>> 840ba750ba46d882f61f08015fe7b26cdb2519b6
+
       entrada = scanner.nextInt();
       System.out.println();
 
@@ -267,12 +263,8 @@ class ProyectoFactura {
         default:
           break;
       }
-<<<<<<< HEAD
     } while (entrada != 6);
-=======
-    } while (entrada != 5);
-    scanner.close();
->>>>>>> 840ba750ba46d882f61f08015fe7b26cdb2519b6
-    conexion.close();
-  }
-}
+    }while(entrada!=5);scanner.close();
+
+  conexion.close();
+}}

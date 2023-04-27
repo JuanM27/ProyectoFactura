@@ -1,4 +1,4 @@
-package com.proyectofactura.ProyectoFactura;
+package ProyectoFactura.eclipse;
 
 public class Factura {
   private int idFac;

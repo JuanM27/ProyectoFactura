@@ -1,4 +1,4 @@
-package com.proyectofactura.ProyectoFactura;
+package ProyectoFactura.eclipse;
 
 import java.util.ArrayList;
 

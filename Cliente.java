@@ -1,4 +1,4 @@
-package com.proyectofactura.ProyectoFactura;
+package ProyectoFactura.eclipse;
 
 public class Cliente {
   private String nombre;
